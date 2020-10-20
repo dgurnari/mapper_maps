@@ -1,6 +1,6 @@
 # mapper_GUI
 
-plots the BM graph that can be found  in /input 
+plots the BM graph that can be found  in /Dash/input 
 
 requires networkx and dash  
 https://networkx.org/  
