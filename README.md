@@ -7,7 +7,8 @@ https://networkx.org/
 https://dash.plotly.com/
 
 Usage: 
-$ cd Dash
-$ python graph_app.py 
+
+$ cd Dash  
+$ python graph_app.py  
 
 then visit http://127.0.0.1:8050/ on your browser
