@@ -2,9 +2,9 @@
 
 plots the BM graph that can be found  in /input 
 
-requires networkx and dash
-https://networkx.org/
-https://dash.plotly.com/
+requires networkx and dash  
+https://networkx.org/  
+https://dash.plotly.com/  
 
 Usage: 
 
