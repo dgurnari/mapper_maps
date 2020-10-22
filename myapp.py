@@ -1,9 +1,9 @@
 import networkx as nx
 
+from sys import argv
+
 from bokeh.io import output_file, show
-
 from bokeh.layouts import layout, column, row, grid
-
 from bokeh.models import (BoxZoomTool, Circle, HoverTool,
                           MultiLine, Plot, Range1d, ResetTool,
                           ColumnDataSource, LabelSet,
@@ -45,12 +45,15 @@ def color_nodes(G1, G2, SELECTED_NODES, my_palette=my_red_palette):
 
 # Prepare Data
 
+GRAPH1_PATH = argv[1]
+GRAPH2_PATH = argv[2]
+
 ###########
 # GRAPH 1 #
 ###########
 
 # read BM graph
-G1 = nx.read_gpickle('input/test_graph1.pkl')
+G1 = nx.read_gpickle(GRAPH1_PATH)
 
 # cap the size for display
 for node in G1.nodes:
@@ -64,7 +67,7 @@ for node in G1.nodes:
 ###########
 
 # read BM graph
-G2 = nx.read_gpickle('input/test_graph2.pkl')
+G2 = nx.read_gpickle(GRAPH2_PATH)
 
 # cap the size
 for node in G2.nodes:
