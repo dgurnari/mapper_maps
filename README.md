@@ -7,6 +7,9 @@ https://networkx.org/
 https://bokeh.org/
 
 Usage:  
-$ bokeh serve --show myapp.py input/test_graph1.pkl input/test_graph2.pkl   
+$ bokeh serve --show grap_viewer.py input/test_graph1.pkl input/test_graph2.pkl   
 
-then visit http://localhost:5006/myapp on your browser
+then visit http://localhost:5006/myapp on your browser  
+
+
+grap_viewer.ipynb contains the same code, the local server is automatically launched inside jupyter. 
