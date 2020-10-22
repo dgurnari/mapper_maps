@@ -1,13 +1,12 @@
 # mapper_GUI
 
-plots the BM graph which is in /input \\
+plots the BM graphs which are in /input and color the one on the right acconding the the selected nodes on the left.  
 
-requires networkx and dash
+requires networkx and bokeh
 https://networkx.org/
-https://dash.plotly.com/
+https://bokeh.org/
 
-Usage: \\
-$ cd Dash
-$ python graph_app.py \\
+Usage:  
+$ bokeh serve --show myapp.py  
 
-then visit http://127.0.0.1:8050/ on your browser
+then visit http://localhost:5006/myapp on your browser
