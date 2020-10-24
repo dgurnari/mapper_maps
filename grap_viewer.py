@@ -170,7 +170,7 @@ plot2 = Plot(plot_width=800, plot_height=800,
             sizing_mode="stretch_both")
 
 node_hover_tool = HoverTool(tooltips=[("index", "@index"), ("size", "@size"),
-                                       ("coverage", "@coverage")])
+                                       ("coverage", "@{coverage}{%0f}")])
 plot2.add_tools(PanTool(), node_hover_tool, BoxZoomTool(), WheelZoomTool(),
                 ResetTool())
 
@@ -234,6 +234,8 @@ def update():
 
     graph_renderer_1.node_renderer.data_source.data['color'] = [G1.nodes[n]['color'] for n in G1.nodes]
     graph_renderer_2.node_renderer.data_source.data['color'] = [G2.nodes[n]['color'] for n in G2.nodes]
+
+    graph_renderer_2.node_renderer.data_source.data['coverage'] = [G2.nodes[n]['coverage'] for n in G2.nodes]
 
 button.on_click(update)
 
