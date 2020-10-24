@@ -1,6 +1,6 @@
 # mapper_GUI
 
-plots the BM graphs which are in /input and color the one on the right acconding the the selected nodes on the left.  
+plots the BM graphs which are in /input and color the one on the right according the the selected nodes on the left.  
 
 requires networkx and bokeh
 https://networkx.org/
