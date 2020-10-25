@@ -4,8 +4,10 @@
 
 import networkx as nx
 import csv
+import sys
 
-from sys import argv
+csv.field_size_limit(sys.maxsize)
+
 
 from bokeh.io import show
 from bokeh.plotting import figure
@@ -48,11 +50,14 @@ def read_graph_from_list(GRAPH_ADJ_PATH, GRAPH_POINTS_PATH):
     for i, line_list in enumerate(reader):
         points_covered[i+1] = [int(node) for node in line_list[0].split(' ')]
 
-    for node in range(1, len(G.nodes)+1):
+    # add the nodes that are not in the edgelist
+    G.add_nodes_from( range(1, len(points_covered) + 1) )
+
+    for node in G.nodes:
         G.nodes[node]['points covered'] = points_covered[node]
         G.nodes[node]['size'] = len(G.nodes[node]['points covered'])
         # cap the size for display
-        G.nodes[node]['size capped'] = min(100, max(10, G.nodes[node]['size']))
+        G.nodes[node]['size capped'] = min(5, max(10, G.nodes[node]['size']))
 
     return G
 
@@ -63,12 +68,13 @@ def read_graph_from_list(GRAPH_ADJ_PATH, GRAPH_POINTS_PATH):
 # Prepare Data
 
 # adj lists path
-GRAPH1_PATH = 'input/graph1_edges'
-GRAPH2_PATH = 'input/graph2_edges'
+# adj lists path
+GRAPH1_PATH = sys.argv[1]
+GRAPH2_PATH = sys.argv[3]
 
 # point covered by each node path
-GRAPH1_POINTS_PATH = 'input/graph1_points_covered_by_landmarks'
-GRAPH2_POINTS_PATH = 'input/graph2_points_covered_by_landmarks'
+GRAPH1_POINTS_PATH = sys.argv[2]
+GRAPH2_POINTS_PATH = sys.argv[4]
 
 ###########
 # GRAPH 1 #

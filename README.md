@@ -7,9 +7,11 @@ https://networkx.org/
 https://bokeh.org/
 
 Usage:  
-$ bokeh serve --show grap_viewer.py  
+$ bokeh serve --show grap_viewer.py --args [GRAPH FILES]  
+Example
+$ bokeh serve --show grap_viewer.py --args knot_graphs/Alexander_rad_40/BM_graph_edges knot_graphs/Alexander_rad_40/AlexanderForDS_0_15_initial_points_in_cover knot_graphs/Jones_rad_50/BM_graph_edges knot_graphs/Jones_rad_50/JonesPooly_initial_points_in_cover   
 
 then visit http://localhost:5006/myapp on your browser  
 
 
-grap_viewer.ipynb contains the same code, the local server is automatically launched inside jupyter. 
+grap_viewer.ipynb contains the same code, the local server is automatically launched inside jupyter.
