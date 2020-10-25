@@ -30,10 +30,13 @@ from bokeh.models import (BoxZoomTool, Circle, HoverTool,
                           TapTool, WheelZoomTool, PanTool,
                           ColorBar, LinearColorMapper, BasicTicker,
                           Button, TextInput,
-                          CustomJS, MultiChoice)
+                          CustomJS, MultiChoice,
+                          SaveTool)
 
 from bokeh.palettes import linear_palette, Reds256
 from bokeh.plotting import from_networkx, figure, curdoc
+
+from bokeh.events import Tap
 
 
 # ## Read the graphs
@@ -48,8 +51,9 @@ from bokeh.plotting import from_networkx, figure, curdoc
 
 def read_graph_from_list(GRAPH_ADJ_PATH, GRAPH_POINTS_PATH):
     # read graph adjecency list
+    # G_dummy is needed because I want the nodes to be ordered
     # ASSUME NODES ARE NUMBERED FROM 1 TO N
-    G = nx.read_adjlist(GRAPH_ADJ_PATH, nodetype = int)
+    G_dummy = nx.read_adjlist(GRAPH_ADJ_PATH, nodetype = int)
 
     # read list of points covered by each node
     # ASSUME NODES ARE NUMBERED FROM 1 TO N
@@ -65,7 +69,9 @@ def read_graph_from_list(GRAPH_ADJ_PATH, GRAPH_POINTS_PATH):
             MAX_NODE_SIZE = len(points_covered[i+1])
 
     # add the nodes that are not in the edgelist
+    G = nx.Graph()
     G.add_nodes_from( range(1, len(points_covered) + 1) )
+    G.add_edges_from(G_dummy.edges)
 
     MIN_SCALE = 10
     MAX_SCALE = 25
@@ -156,7 +162,7 @@ plot1 = Plot(plot_width=800, plot_height=800,
 
 node_hover_tool = HoverTool(tooltips=[("index", "@index"), ("size", "@size")])
 plot1.add_tools(PanTool(), node_hover_tool, BoxZoomTool(), WheelZoomTool(),
-                ResetTool())
+                ResetTool(), TapTool(), SaveTool())
 
 graph_renderer_1 = from_networkx(G1, nx.spring_layout,
                                   seed=42, scale=1, center=(0, 0))
@@ -195,7 +201,7 @@ plot2 = Plot(plot_width=800, plot_height=800,
 node_hover_tool = HoverTool(tooltips=[("index", "@index"), ("size", "@size"),
                                        ("coverage", "@{coverage}{%0f}")])
 plot2.add_tools(PanTool(), node_hover_tool, BoxZoomTool(), WheelZoomTool(),
-                ResetTool())
+                ResetTool(), SaveTool())
 
 graph_renderer_2 = from_networkx(G2, nx.spring_layout,
                                   seed=42, scale=1, center=(0, 0))
@@ -282,6 +288,16 @@ def update():
     graph_renderer_2.node_renderer.data_source.data['coverage'] = [G2.nodes[n]['coverage'] for n in G2.nodes]
 
 color_button.on_click(update)
+
+taptool = plot1.select(type=TapTool)
+
+def update_node_highlight(event):
+    nodes_clicked_ints = graph_renderer_1.node_renderer.data_source.selected.indices
+    nodes_clicked_ints = [n+1 for n in nodes_clicked_ints]
+    nodes_clicked = list(map(str, nodes_clicked_ints))
+    multi_choice.value += nodes_clicked
+
+plot1.on_event(Tap, update_node_highlight)
 
 
 ##########
