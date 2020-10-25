@@ -1,12 +1,23 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
 import networkx as nx
 import csv
 import sys
 
-csv.field_size_limit(sys.maxsize)
+# to deal with large csv
+maxInt = sys.maxsize
+decrement = True
+
+while decrement:
+    # decrease the maxInt value by factor 10
+    # as long as the OverflowError occurs.
+    decrement = False
+    try:
+        csv.field_size_limit(maxInt)
+    except OverflowError:
+        maxInt = int(maxInt/10)
+        decrement = True
 
 
 from bokeh.io import show
@@ -47,17 +58,23 @@ def read_graph_from_list(GRAPH_ADJ_PATH, GRAPH_POINTS_PATH):
 
     points_covered = {}
 
+    MAX_NODE_SIZE = 0
     for i, line_list in enumerate(reader):
         points_covered[i+1] = [int(node) for node in line_list[0].split(' ')]
+        if len(points_covered[i+1]) > MAX_NODE_SIZE:
+            MAX_NODE_SIZE = len(points_covered[i+1])
 
     # add the nodes that are not in the edgelist
     G.add_nodes_from( range(1, len(points_covered) + 1) )
 
+    MIN_SCALE = 10
+    MAX_SCALE = 25
+
     for node in G.nodes:
         G.nodes[node]['points covered'] = points_covered[node]
         G.nodes[node]['size'] = len(G.nodes[node]['points covered'])
-        # cap the size for display
-        G.nodes[node]['size capped'] = min(5, max(10, G.nodes[node]['size']))
+        # rescale the size for display
+        G.nodes[node]['size rescaled'] = MAX_SCALE*G.nodes[node]['size']/MAX_NODE_SIZE + MIN_SCALE
 
     return G
 
@@ -156,7 +173,7 @@ labels_1 = LabelSet(x='x', y='y', text='node_id', source=source_1,
                     text_color='black')
 
 # nodes
-graph_renderer_1.node_renderer.glyph = Circle(size='size capped',
+graph_renderer_1.node_renderer.glyph = Circle(size='size rescaled',
                                             fill_color='color',
                                             fill_alpha=0.8)
 
@@ -194,7 +211,7 @@ labels_2 = LabelSet(x='x', y='y', text='node_id', source=source_2,
                   text_color='black')
 
 # nodes
-graph_renderer_2.node_renderer.glyph = Circle(size='size capped',
+graph_renderer_2.node_renderer.glyph = Circle(size='size rescaled',
                                               fill_color='color',
                                               fill_alpha=0.8)
 
@@ -213,13 +230,34 @@ plot2.add_layout(color_bar_2, 'right')
 plot2.renderers.append(graph_renderer_2)
 plot2.renderers.append(labels_2)
 
-##########
-# button #
-##########
+################
+# color button #
+################
 
-button = Button(label='COLOR',
+color_button = Button(label='COLOR',
                 height_policy='fit',
                 button_type="success")
+
+
+################
+# labels button #
+################
+
+labels_button = Button(label='HIDE LABELS',
+                height_policy='fit',)
+                #button_type="success")
+
+def showLabel():
+    if labels_button.label == 'HIDE LABELS':
+        labels_button.label = 'SHOW LABELS'
+        labels_1.text_alpha = 0
+        labels_2.text_alpha = 0
+    else:
+        labels_button.label = 'HIDE LABELS'
+        labels_1.text_alpha = 1
+        labels_2.text_alpha = 1
+
+labels_button.on_click(showLabel)
 
 ###################
 # multichoice box #
@@ -243,13 +281,13 @@ def update():
 
     graph_renderer_2.node_renderer.data_source.data['coverage'] = [G2.nodes[n]['coverage'] for n in G2.nodes]
 
-button.on_click(update)
+color_button.on_click(update)
 
 
 ##########
 # LAYOUT #
 ##########
-layout = grid([[button, multi_choice], [plot1, plot2]])
+layout = grid([[labels_button,color_button], [multi_choice], [plot1, plot2]])
 
 # layout = column(row(button, multi_choice),
 #                 row(plot1, plot2, sizing_mode="stretch_both"),
