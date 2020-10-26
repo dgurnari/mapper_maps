@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import networkx as nx
+from math import sqrt
 import csv
 import sys
 
@@ -165,7 +166,11 @@ plot1.add_tools(PanTool(), node_hover_tool, BoxZoomTool(), WheelZoomTool(),
                 ResetTool(), TapTool(), SaveTool())
 
 graph_renderer_1 = from_networkx(G1, nx.spring_layout,
-                                  seed=42, scale=1, center=(0, 0))
+                                 seed=42, scale=1, center=(0, 0),
+                                 k= 10/sqrt(len(G1.nodes)),
+                                 iterations=1000)
+
+
 
 
 ## labels
@@ -176,7 +181,7 @@ x_1, y_1 = zip(*graph_renderer_1.layout_provider.graph_layout.values())
 source_1 = ColumnDataSource({'x': x_1, 'y': y_1,
                              'node_id': [node for node in G1.nodes]})
 labels_1 = LabelSet(x='x', y='y', text='node_id', source=source_1,
-                    text_color='black')
+                    text_color='black', text_alpha=0)
 
 # nodes
 graph_renderer_1.node_renderer.glyph = Circle(size='size rescaled',
@@ -204,7 +209,9 @@ plot2.add_tools(PanTool(), node_hover_tool, BoxZoomTool(), WheelZoomTool(),
                 ResetTool(), SaveTool())
 
 graph_renderer_2 = from_networkx(G2, nx.spring_layout,
-                                  seed=42, scale=1, center=(0, 0))
+                                 seed=42, scale=1, center=(0, 0),
+                                 k=10 / sqrt(len(G2.nodes)),
+                                 iterations=1000)
 
 ## labels
 # get the coordinates of each node
@@ -214,7 +221,7 @@ x_2, y_2 = zip(*graph_renderer_2.layout_provider.graph_layout.values())
 source_2 = ColumnDataSource({'x': x_2, 'y': y_2,
                            'node_id': [node for node in G2.nodes]})
 labels_2 = LabelSet(x='x', y='y', text='node_id', source=source_2,
-                  text_color='black')
+                  text_color='black', text_alpha=0)
 
 # nodes
 graph_renderer_2.node_renderer.glyph = Circle(size='size rescaled',
@@ -249,7 +256,7 @@ color_button = Button(label='COLOR',
 # labels button #
 ################
 
-labels_button = Button(label='HIDE LABELS',
+labels_button = Button(label='SHOW LABELS',
                 height_policy='fit',)
                 #button_type="success")
 
