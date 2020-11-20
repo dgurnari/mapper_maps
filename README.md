@@ -2,9 +2,9 @@
 
 plots two BM graphs and color the one on the right according the the selected nodes on the left.  
 
-requires networkx and bokeh
-https://networkx.org/
-https://bokeh.org/
+requires networkx 2.5 and bokeh 2.2.2
+https://networkx.org/  
+https://bokeh.org/  
 
 Usage:  
 $ bokeh serve --show two_graphs_viewer.py --args [GRAPH FILES]  
