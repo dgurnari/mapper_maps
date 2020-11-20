@@ -2,7 +2,8 @@
 
 This software plots two BM graphs and color the one on the right according the the selected nodes on the left.  
 
-Please consult Mapping_Mappers.pdf for an introdution to the idea behind this code.
+Please consult Mapping_Mappers.pdf for an introdution to the idea behind this code.  
+A short video example can be found at https://youtu.be/umSQt03kpPA .
 
 requires networkx 2.5 and bokeh 2.2.2  
 https://networkx.org/  
