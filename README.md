@@ -4,7 +4,7 @@ This software plots two BM graphs and color the one on the right according the t
 
 Please consult Mapping_Mappers.pdf for an introdution to the idea behind this code.
 
-requires networkx 2.5 and bokeh 2.2.2
+requires networkx 2.5 and bokeh 2.2.2  
 https://networkx.org/  
 https://bokeh.org/  
 
