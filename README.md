@@ -1,4 +1,4 @@
-# mapper_GUI
+# Mapper-based visualization of functions
 
 This software plots two BM graphs and color the one on the right according the the selected nodes on the left.  
 
